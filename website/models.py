@@ -1,11 +1,5 @@
 from django.db import models, transaction
 
-
-class Banner(models.Model):
-    name = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='uploads/banner')
-
-
 # Create your models here.
 class Services(models.Model):
     name = models.CharField(max_length=100)
@@ -23,11 +17,13 @@ class Contact(models.Model):
     phone = models.CharField(max_length=13)
     email = models.CharField(max_length=50)
     address = models.CharField(max_length=80)
+    status = models.BooleanField(default=False)
 
 
 class ContactUs(models.Model):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
     email = models.EmailField()
-    phone = models.CharField(max_length=13)
     subject = models.CharField(max_length=255)
     message = models.TextField()
 
@@ -38,13 +34,21 @@ class ContactUs(models.Model):
         return self.email
 
 
+
 class Blog(models.Model):
     blog_title = models.CharField(max_length=50)
     blog_description = models.TextField()
     blog_image = models.ImageField(upload_to='uploads/blogs')
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_date']
 
     def __str__(self):
         return self.blog_title
+
+
 
 
 class Comment(models.Model):
@@ -60,6 +64,7 @@ class Comment(models.Model):
 
     def __str__(self):
         return 'Comment by {} {}'.format(self.first_name, self.last_name)
+
 
 
 class About(models.Model):
@@ -78,3 +83,4 @@ class About(models.Model):
 
     class Meta:
         verbose_name_plural = "About"
+
