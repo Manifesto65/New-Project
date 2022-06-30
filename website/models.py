@@ -1,6 +1,39 @@
 from django.db import models, transaction
+from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import post_save
 
 # Create your models here.
+
+
+class User(AbstractUser):
+    first_name = models.CharField(max_length=50, blank=True, null=True)
+    last_name = models.CharField(max_length=50, blank=True, null=True)
+    phoneno = models.CharField(max_length=50, blank=True, null=True)
+    avatar = models.ImageField(
+        upload_to="uploads/avatar", blank=True, null=True)
+    address = models.CharField(max_length=20, blank=True, null=True)
+
+    @staticmethod
+    def get_user_by_id(username):
+        try:
+            print(username)
+            return User.objects.get(username=username)
+
+        except:
+            return False
+
+    def isuserExist(self):
+        if User.objects.filter(username=self.username):
+            return True
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
+
+
 class Services(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -34,7 +67,6 @@ class ContactUs(models.Model):
         return self.email
 
 
-
 class Blog(models.Model):
     blog_title = models.CharField(max_length=50)
     blog_description = models.TextField()
@@ -49,22 +81,17 @@ class Blog(models.Model):
         return self.blog_title
 
 
-
-
 class Comment(models.Model):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    email = models.EmailField(max_length=100)
     content = models.TextField()
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ('-created',)
 
     def __str__(self):
-        return 'Comment by {} {}'.format(self.first_name, self.last_name)
-
+        return 'Comment by {}'.format(self.user.username)
 
 
 class About(models.Model):
@@ -84,3 +111,17 @@ class About(models.Model):
     class Meta:
         verbose_name_plural = "About"
 
+
+def user_created_signal(sender, instance, created, **kwargs):
+    print(instance, created)
+    if created:
+        UserProfile.objects.create(user=instance)
+
+
+post_save.connect(user_created_signal, sender=User)
+
+
+class Banner(models.Model):
+    name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='uploads/banner')
+    is_active = models.BooleanField(default=False)

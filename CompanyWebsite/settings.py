@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'website'
+    'website',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -74,19 +75,18 @@ WSGI_APPLICATION = 'CompanyWebsite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 DATABASES = {
-   'default': {
-       'ENGINE': 'django.db.backends.mysql',
-       'USER': "root",
-       "PASSWORD": "",
-       "HOST": "localhost",
-       "PORT": "3306",
-       "NAME": "companyweb",
-       'OPTIONS':{
-           'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-       }
-   }
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': "root",
+        "PASSWORD": "",
+        "HOST": "localhost",
+        "PORT": "3306",
+        "NAME": "companyweb",
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        }
+    }
 }
-
 
 
 # Password validation
@@ -128,11 +128,21 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [STATIC_DIR]
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'website.User'
 
 
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = "hariacharya347@gmail.com"
+EMAIL_HOST_PASSWORD = "kstljxbfwdwxordk"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+BASE_URL = "127.0.0.1:8000"
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
