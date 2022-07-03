@@ -1,6 +1,7 @@
 from django.db import models, transaction
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
+from mptt.models import MPTTModel, TreeForeignKey
 
 # Create your models here.
 
@@ -81,14 +82,18 @@ class Blog(models.Model):
         return self.blog_title
 
 
-class Comment(models.Model):
+class Comment(MPTTModel):
     content = models.TextField()
-    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    blog = models.ForeignKey(
+        Blog, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    parent = TreeForeignKey('self', null=True, blank=True,
+                            related_name="children", on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
+    status = models.BooleanField(default=True)
 
-    class Meta:
-        ordering = ('-created',)
+    class MPTTMeta:
+        order_insertion_by = ['created']
 
     def __str__(self):
         return 'Comment by {}'.format(self.user.username)

@@ -1,5 +1,28 @@
 {% extends 'base.html' %} {% block title %}Digital Guide Nepal{% endblock %}
 {%load static%} {%block content%}
+
+<style>
+  @media screen and (min-width: 600px) {
+    .children form {
+      margin-left: -48px;
+      /* will touch very left side */
+    }
+
+    .children .children form {
+      margin-left: -96px;
+      /* will touch very left side */
+    }
+  }
+  .children form {
+    margin-left: -48px;
+    /* will touch very left side */
+  }
+
+  .children .children form {
+    margin-left: -96px;
+    /* will touch very left side */
+  }
+</style>
 <body>
   <div class="wrapper">
     <!-- Top Bar Start -->
@@ -41,7 +64,7 @@
               <div class="meta-top">
                 <ul>
                   <li class="d-flex align-items-center">
-                    <i class="bi bi-clock"></i>
+                    <i class="fa fa-clock"></i>
                     <a href="blog-details.html"
                       ><time datetime="2020-01-01"
                         >{{blog.created_date}}</time
@@ -64,52 +87,150 @@
             <!-- End blog post -->
 
             <div class="comments">
+              {% with allcomments.count as total_comments %}
               <h4 class="comments-count">
-                <i class="flaticon-comment"></i> {{total_comment}} Comments
+                {{ total_comments }} comment{{ total_comments|pluralize }}
               </h4>
-              {% for comment in comments%}
-              <div id="comment-1" class="comment">
-                <div class="d-flex">
-                  <div class="comment-img">
-                    <img src="assets/img/blog/comments-1.jpg" alt="" />
-                  </div>
-                  <div>
-                    <h5>
-                      <a href="">{{comment.user.username}}</a>
-                      <a href="#" class="reply"
-                        ><i class="bi bi-reply-fill"></i> Reply</a
-                      >
-                    </h5>
-                    <time datetime="2020-01-01">{{comment.created}}</time>
-                    <p>{{comment.content}}</p>
-                  </div>
-                </div>
-              </div>
-              <!-- End comment #1 -->
-              {%endfor%}
+              {% endwith %} {% load mptt_tags %}
 
-              <div class="reply-form">
-                <h4>Leave comment on post</h4>
-
-                <form action="" method="post">
-                  {%csrf_token%}
-                  <div class="row"></div>
-                  <div class="row">
-                    <div class="col form-group">
-                      <textarea
-                        name="comment"
-                        class="form-control"
-                        placeholder="Your Comment*"
-                      ></textarea>
+              <div>
+                {% recursetree comments %}
+                <div id="comment-2" class="comment">
+                  <div class="d-flex">
+                    <div id="{{ node.id }}" class="container">
+                      <div class="row">
+                        <div class="col-md-1">
+                          <div class="comment-img">
+                            <img src="{{node.user.avatar.url}}" alt="" />
+                          </div>
+                        </div>
+                        <div class="col-md-11 pl-4">
+                          <div>
+                            <h5>
+                              <a href="">{{ node.user.username }}</a>
+                              {% if node.level < 3 %}
+                              <button
+                                class="button reply"
+                                onclick="myFunction({{ node.id }})"
+                              >
+                                Reply
+                              </button>
+                              {% endif %}
+                            </h5>
+                            <time datetime="2020-01-01"
+                              >{{ node.created }}</time
+                            >
+                            <p>{{ node.content }}</p>
+                            <p>{{node.level}}</p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <button type="submit" class="btn btn-primary">
-                    Add a Comment
-                  </button>
-                </form>
+                  {% if not node.is_leaf_node %}
+                  <div class="children pl-2 pl-md-5">{{ children }}</div>
+                  {%endif%} {% endrecursetree %}
+                </div>
+
+                <div class="py-4">
+                  <nav aria-label="Page navigation example">
+                    {% if comments.has_other_pages %}
+                    <ul class="pagination">
+                      {% if comments.has_previous %}
+                      <li class="page-item">
+                        <a
+                          class="page-link"
+                          href="?page={{ comments.previous_page_number }}"
+                          >Previous</a
+                        >
+                      </li>
+                      {% else %}
+                      <li class="page-item disabled">
+                        <a class="page-link" href="#">Previous</a>
+                      </li>
+                      {% endif %} {% for num in comments.paginator.page_range %}
+                      {% if comments.number == l %}
+                      <li class="page-item active" aria-current="page">
+                        <span class="page-link"
+                          >{{ num }}
+                          <span class="sr-only">(current)</span></span
+                        >
+                      </li>
+                      {% else %}
+                      <li>
+                        <a class="page-link" href="?page={{ num }}"
+                          >{{ num }}</a
+                        >
+                      </li>
+                      {% endif %} {% endfor %} {% if comments.has_next %}
+                      <li class="page-item">
+                        <a
+                          class="page-link"
+                          href="?page={{ comments.next_page_number }}"
+                          >Next</a
+                        >
+                      </li>
+                      {% else %}
+                      <li class="page-item disabled">
+                        <a class="page-link" href="#">Next</a>
+                      </li>
+                      {% endif %}
+                    </ul>
+                    {% endif %}
+                  </nav>
+                </div>
+
+                <div id="myDIV" style="display: block">
+                  <form id="myForm" method="post">
+                    <h2>Create new comment</h2>
+                    {{ comment_form.as_p }} {% csrf_token %}
+                    <button
+                      type="submit"
+                      class="btn btn-primary btn-lg btn-block"
+                    >
+                      Submit
+                    </button>
+                  </form>
+                </div>
               </div>
+
+              <script>
+                function formExit() {
+                  document.getElementById("newForm").remove();
+                }
+
+                function myFunction(id) {
+                  if (document.contains(document.getElementById("newForm"))) {
+                    document.getElementById("newForm").remove();
+                  }
+
+                  var d1 = document.getElementById(id);
+                  d1.insertAdjacentHTML(
+                    "afterend",
+                    '<form id="newForm" method="post"> \
+                <div class="d-flex justify-content-between"><h6>Reply:</h6><div><button type="button" class="btn btn-outline-secondary btn-sm" onclick="formExit()"">Close</button></div></div> \
+                <select name="parent" class="d-none" id="id_parentt"> \
+                <option value="' +
+                      id +
+                      '" selected="' +
+                      id +
+                      '"></option> \
+                </select> \
+                <label for="id_content"></label> \
+                <textarea name="content" cols="30" rows="1" class="form-control" required id="id_content"></textarea> \
+                {% csrf_token %} \
+                <button type="submit" class="btn btn-sm btn-primary">Submit</button> \
+              </form>'
+                  );
+
+                  //document.querySelector('#id_parentt [value="' + id + '"]').selected = true;
+                }
+
+                $("#myForm").trigger("reset");
+              </script>
+
+              <!-- End blog comments -->
             </div>
-            <!-- End blog comments -->
           </div>
 
           <div class="col-lg-4">

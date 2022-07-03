@@ -1,6 +1,7 @@
 from django.views import generic
 from django.urls import reverse
 from django.shortcuts import render, redirect
+from .forms import NewCommentForm
 from django.contrib.auth.hashers import make_password, check_password
 from django.views import View
 from .models import About as a
@@ -9,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import UserForm
 
 # Import Pagination Stuff
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def home(request):
@@ -133,43 +134,6 @@ class BlogList(View):
         return render(request, "blog.html", data)
 
 
-class BlogDetails(View):
-    def get(self, request, blog_id):
-        query = request.GET.get('query')
-        if query:
-            return redirect(reverse('website:search') + '?query=' + query)
-
-        blog = Blog.objects.get(id=blog_id)
-        total_comment = Comment.objects.filter(blog=blog).count()
-        comments = Comment.objects.filter(blog=blog)
-        blog_list = Blog.objects.all()
-        print(blog)
-        data = {
-            'blog': blog,
-            'blog_list': blog_list,
-            'total_comment': total_comment,
-            'comments': comments
-        }
-        return render(request, "blog_detail.html", data)
-
-    def post(self, request, blog_id):
-        postData = request.POST
-        content = postData.get("comment")
-        blog = Blog.objects.get(id=blog_id)
-        try:
-            user = User.objects.get(username=request.session['username'])
-        except:
-            user = None
-        if user:
-            comment = Comment(content=content,
-                              blog=blog,
-                              user=user)
-            comment.save()
-            return redirect("website:blog_detail", blog_id=blog_id)
-        else:
-            return redirect("website:account")
-
-
 class Account(View):
     def get(self, request):
         return render(request, 'account/account.html')
@@ -279,3 +243,85 @@ class Search(View):
 
         print(data)
         return render(request, "search.html", data)
+
+
+class BlogDetails(View):
+    def get(self, request, blog_id):
+        query = request.GET.get('query')
+        if query:
+            return redirect(reverse('website:search') + '?query=' + query)
+
+        blog = Blog.objects.get(id=blog_id)
+        total_comment = Comment.objects.filter(blog=blog).count()
+        allcomments = blog.comments.filter(status=True)
+        page = request.GET.get('page', 1)
+
+        blog_list = Blog.objects.all()
+        comment_form = NewCommentForm()
+        paginator = Paginator(allcomments, 10)
+        try:
+            comments = paginator.page(page)
+        except PageNotAnInteger:
+            comments = paginator.page(1)
+        except EmptyPage:
+            comments = paginator.page(paginator.num_pages)
+        user_comment = None
+        print(blog)
+        data = {
+            'blog': blog,
+            'blog_list': blog_list,
+            'total_comment': total_comment,
+            'comments':  user_comment,
+            'comments': comments,
+            'comment_form': comment_form,
+            'allcomments': allcomments
+        }
+        return render(request, "blog_detail.html", data)
+
+    def post(self, request, blog_id):
+        postData = request.POST
+        content = postData.get("comment")
+        blog = Blog.objects.get(id=blog_id)
+        try:
+            user = User.objects.get(username=request.session['username'])
+        except:
+            user = None
+        if user:
+            comment_form = NewCommentForm(request.POST)
+            if comment_form.is_valid():
+                user_comment = comment_form.save(commit=False)
+                user_comment.blog = blog
+                user_comment.user = user
+                user_comment.save()
+            return redirect("website:blog_detail", blog_id=blog_id)
+        else:
+            return redirect("website:account")
+
+
+# def post_single(request, post):
+
+#     post = get_object_or_404(Post, slug=post, status='published')
+
+#     allcomments = post.comments.filter(status=True)
+#     page = request.GET.get('page', 1)
+
+#     paginator = Paginator(allcomments, 10)
+#     try:
+#         comments = paginator.page(page)
+#     except PageNotAnInteger:
+#         comments = paginator.page(1)
+#     except EmptyPage:
+#         comments = paginator.page(paginator.num_pages)
+
+#     user_comment = None
+
+#     if request.method == 'POST':
+#         comment_form = NewCommentForm(request.POST)
+#         if comment_form.is_valid():
+#             user_comment = comment_form.save(commit=False)
+#             user_comment.post = post
+#             user_comment.save()
+#             return HttpResponseRedirect('/' + post.slug)
+#     else:
+#         comment_form = NewCommentForm()
+#     return render(request, 'single.html', {'post': post, 'comments':  user_comment, 'comments': comments, 'comment_form': comment_form, 'allcomments': allcomments, })
