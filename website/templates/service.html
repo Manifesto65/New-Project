@@ -1,0 +1,101 @@
+{% extends 'base.html' %} {% block title %}Digital Guide Nepal{% endblock %}
+{%load static%} {%block content%}
+
+<body>
+  <div class="wrapper">
+    <!-- Top Bar Start -->
+    {%include 'topnav.html'%}
+    <!-- Top Bar End -->
+
+    <!-- Nav Bar Start -->
+    {%include 'navbar.html'%}
+    <!-- Nav Bar End -->
+
+    <!-- Page Header Start -->
+<div class="page-header">
+   <div class="container">
+       <div class="row">
+           <div class="col-12">
+               <h2>Our Services</h2>
+           </div>
+           <div class="col-12">
+               <a href="">Home</a>
+               <a href="">Our Services</a>
+           </div>
+       </div>
+   </div>
+</div>
+<!-- Page Header End -->
+
+
+<!-- Service Start -->
+<div class="blog">
+   <div class="container">
+       <div class="section-header text-center">
+       </div>
+       <div class="row blog-page">
+           {%for service in services%}
+           <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
+               <div class="blog-item">
+                   <div class="blog-img">
+                       <img src="{{service.service_image.url}}" alt="Image">
+                   </div>
+                   <div class="blog-title">
+                       <h3>{{service.name}}</h3>
+                       <a class="btn" href="{%url 'website:service_detail' service.id %}">+</a>
+                   </div>
+
+                   <div class="blog-text">
+                       <p>
+                           {{service.description|truncatechars:250}}
+                       </p>
+                   </div>
+               </div>
+           </div>
+           {%endfor%}
+       </div>
+       <div class="row">
+           <div class="col-12">
+               <ul class="pagination justify-content-center">
+                   {% if services.has_previous %}
+                   <li class="page-item"><a class="page-link" href="?page={{ services.previous_page_number }}">Previous</a>
+                   </li>
+                   {% endif %}
+
+                   {% for i in services.paginator.page_range %}
+                   {% if services.number == i %}
+                   <li class="page-item active" aria-current="page">
+         <span class="page-link">
+           {{ i }}
+           <span class="sr-only">(current)</span>
+         </span>
+                   </li>
+                   {% elif i > services.number|add:'-3' and i < services.number|add:'3' %}
+                   <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+
+                   {% endif %}
+                   {% endfor %}
+                   {% if services.has_next %}
+                   <li class="page-item"><a class="page-link" href="?page={{ services.next_page_number }}">Next</a>
+                   </li>
+
+                   {% endif %}
+
+               </ul>
+           </div>
+       </div>
+   </div>
+</div>
+<br></br/>
+<!-- Service End -->
+
+
+
+    <!-- Footer Start -->
+    {%include 'footer.html'%}
+    <!-- Footer End -->
+    <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+  </div>
+</body>
+    {% endblock %}
+
