@@ -21,15 +21,16 @@ class NewCommentForm(forms.ModelForm):
 
         self.fields['parent'].widget.attrs.update(
             {'class': 'd-none'})
+
         self.fields['parent'].label = ''
         self.fields['parent'].required = False
 
     class Meta:
         model = Comment
-        fields = ('parent', 'content')
+        fields = ('blog', 'parent', 'content')
 
         widgets = {
-            'content': forms.Textarea(attrs={'class': 'form-control'}),
+            'content': forms.Textarea(attrs={'class': 'ml-3 mb-3 form-control border-0 comment-add rounded-0', 'rows': '1', 'placeholder': 'Add a public comment'}),
         }
 
     def save(self, *args, **kwargs):

@@ -47,11 +47,29 @@ class Services(models.Model):
         return self.name
 
 
+class Project(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    project_image = models.ImageField(upload_to='uploads/projects')
+
+    def __str__(self):
+        return self.name
+
+
 class Contact(models.Model):
     phone = models.CharField(max_length=13)
     email = models.CharField(max_length=50)
     address = models.CharField(max_length=80)
     status = models.BooleanField(default=False)
+
+
+class Team(models.Model):
+    name = models.CharField(max_length=50)
+    designation = models.CharField(max_length=50)
+    image = models.ImageField(upload_to='uploads/team')
+
+    def __str__(self):
+        return self.name
 
 
 class ContactUs(models.Model):
@@ -130,3 +148,13 @@ class Banner(models.Model):
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to='uploads/banner')
     is_active = models.BooleanField(default=False)
+
+
+class Testimonial(models.Model):
+    customer_name = models.CharField(max_length=50)
+    profession = models.CharField(max_length=50)
+    image = models.ImageField(upload_to='uploads/testomonial')
+    saying = models.TextField()
+
+    def __str__(self):
+        return 'Testimonial by {}'.format(self.customer_name)
