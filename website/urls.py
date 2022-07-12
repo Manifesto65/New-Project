@@ -19,7 +19,7 @@ urlpatterns = [
          ProjectDetails.as_view(), name="project_detail"),
     path('userprofile/<int:user_id>', userprofile, name="profile"),
     path('update_user/<int:pk>', UserUpdateView.as_view(), name="update_user"),
-    path('blog/<int:blog_id>', BlogDetails.as_view(), name="blog_detail"),
+    path('blog/<int:blog_id>', BlogDetails.as_view(), name="blog-detail"),
 
 
 

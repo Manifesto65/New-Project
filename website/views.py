@@ -15,13 +15,14 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def home(request):
-    about = a.objects.filter(is_active=True)
+    about = a.objects.get(is_active=True)
     teams = Team.objects.all()
     testimonials = Testimonial.objects.all()
     banners = Banner.objects.filter(is_active=True)
     print(testimonials)
     services = Services.objects.all()
     blogs = Blog.objects.all()
+    print(about)
     data = {
         'about': about,
         'services': services,
@@ -29,7 +30,6 @@ def home(request):
         'teams': teams,
         'banners': banners,
         'testimonials': testimonials
-
     }
 
     return render(request, "index.html", data)
@@ -282,7 +282,8 @@ class BlogDetails(View):
         blog = Blog.objects.get(id=blog_id)
         total_comment = Comment.objects.filter(blog=blog).count()
         allcomments = blog.comments.filter(status=True)
-        page = request.GET.get('page', 1)
+        # page = request.GET.get('page', 1)
+        print(allcomments)
 
         blog_list = Blog.objects.all()
         comment_form = NewCommentForm()
@@ -302,7 +303,7 @@ class BlogDetails(View):
             'comment_form': comment_form,
             'allcomments': allcomments
         }
-        return render(request, "blog_detail.html", data)
+        return render(request, "blog-detail.html", data)
 
     def post(self, request, *args, **kwargs):
         return self.addcomment(request)
@@ -324,4 +325,4 @@ class BlogDetails(View):
             blog = comment_form.cleaned_data.get('blog')
             print(blog)
             user = request.user.username
-            return redirect("website:blog_detail", blog_id=blog.id)
+            return redirect("website:blog-detail", blog_id=blog.id)

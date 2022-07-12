@@ -1,16 +1,65 @@
 from django.contrib import admin
-from .models import *
+from . import models
 from mptt.admin import MPTTModelAdmin
-# Register your models here.
-admin.site.register(Services)
-admin.site.register(Contact)
-admin.site.register(ContactUs)
-admin.site.register(About)
-admin.site.register(Blog)
-admin.site.register(User)
-admin.site.register(Comment, MPTTModelAdmin)
-admin.site.register(UserProfile)
-admin.site.register(Banner)
-admin.site.register(Team)
-admin.site.register(Project)
-admin.site.register(Testimonial)
+from django.utils.safestring import mark_safe
+
+
+@admin.register(models.About)
+class AboutAdmin(admin.ModelAdmin):
+    list_display = ['company_name', 'company_description',
+                    'companyimage', 'companylogo', 'is_active']
+    list_display_links = ['companylogo']
+    list_editable = ['company_name', 'company_description',
+                     'is_active']
+
+    def companyimage(self, obj):
+        return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
+            url=obj.company_image.url,
+            width=100,
+            height=150,
+        )
+        )
+
+    def companylogo(self, obj):
+        return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
+            url=obj.company_logo.url,
+            width=100,
+            height=150,
+        )
+        )
+
+
+@admin.register(models.Blog)
+class BlogAdmin(admin.ModelAdmin):
+    list_display = ['id', 'blog_title', 'blog_description',
+                    'image', 'blog_image', 'created_date', 'updated_on']
+    list_display_links = ['id']
+    list_editable = ['blog_title', 'blog_description',
+                     'blog_image']
+
+    def image(self, obj):
+        return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
+            url=obj.blog_image.url,
+            width=100,
+            height=150,
+        )
+        )
+
+
+@admin.register(models.Services)
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name',
+                    'description', 'image',
+                    'service_image']
+    list_display_links = ['id']
+    list_editable = ['name',
+                     'description',
+                     'service_image']
+
+    def image(self, obj):
+        return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
+            url=obj.service_image.url,
+            width=100,
+            height=150,
+        )
+        )
