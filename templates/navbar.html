@@ -25,7 +25,7 @@
             >Service</a
           >
           <a href="team.html" class="nav-item nav-link">Team</a>
-          <a href="{%url 'website:service_list' %}" class="nav-item nav-link"
+          <a href="{%url 'website:project_list' %}" class="nav-item nav-link"
             >Project</a
           >
           <a href="{%url 'website:blog_list' %}" class="nav-item nav-link"
@@ -34,7 +34,6 @@
           <a href="{%url 'website:contact' %}" class="nav-item nav-link"
             >Contact</a
           >
-          
           {% if request.session.username %}
 
           <div class="dropdown mt-1">
@@ -66,7 +65,9 @@
           >
           {%endif%}
         </div>
-        
+        <div class="ml-auto">
+          <a class="btn" href="#">Get A Quote</a>
+        </div>
       </div>
     </nav>
   </div>
