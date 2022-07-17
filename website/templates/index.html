@@ -9,6 +9,7 @@
     {%include 'navbar.html'%}
 
     <!-- Carousel Start -->
+  <br>
     
     <div class="container">
       <div class="row">
@@ -16,18 +17,23 @@
               <div class="section-header text-left">
                   <h2>Welcome to Digital Guide Nepal</h2>
               </div>
-              <div class="about-text">
-                  <p>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem.
-                  </p>
-                  <p>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem. Curabitur non nisl nec nisi scelerisque maximus. Aenean consectetur convallis porttitor. Aliquam interdum at lacus non blandit.
-                  </p>
-
+              <div class="row align-items-center">
+                <div class="about-text">
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem.
+                    </p>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem. Curabitur non nisl nec nisi scelerisque maximus. Aenean consectetur convallis porttitor. Aliquam interdum at lacus non blandit.
+                    </p>
+                </div>
               </div>
           </div>
           <div class="col-md-6">
-              <span style="font-weight: bold;" class="Sphere"></span>
+            <div class="about-text">
+              <div class="row align-items-center">
+                <span style="font-weight: bold;" class="Sphere"></span>
+              </div>
+            </div>
           </div>
       </div>
   </div>
@@ -37,17 +43,17 @@
   <script src="https://cdn.jsdelivr.net/npm/TagCloud@2.2.0/dist/TagCloud.min.js"> </script>
   <script>
       const Texts = [
-          'SEO', 'Social Media Management', 'Web-Development',
-          'Software-Development', 'Hosting', 'Domain-Name',
-          'Free-WIFI', 'SASS',
-          'DJANGO', 'NODEJS', 'MONGODB',
-          'EXPRESS', 'MYSQL', 'JQUERY', 'JAVA'
+          'SEO', 'HOSTING', 'WEB-SITE',
+          'S-MEDIA-MANAGEMENT', 'DOMAIN-NAME', 'DATA-MANAGEMENT',
+          'SECURITY-MANAGEMENT', 'APP-DEVELOPMENT',
+          'SYSTEM-DEVELOPMENT', 'MAINTENANCE', '2D/3D-ANIMATION',
+          'GRAPHIC DESIGN', 'ADS-VIDEO', 'SHORT-FILMS', 'ALBUM-SONG'
       ];
 
       var tagCloud = TagCloud('.Sphere', Texts, {
 
           // Sphere radius in px
-          radius: 230,
+          radius: 150,
 
           // animation speed
           // slow, normal, fast
@@ -55,7 +61,7 @@
           initSpeed: 'fast',
 
           // Rolling direction [0 (top) , 90 (left), 135 (right-bottom)] 
-          direction: 135,
+          direction: 90,
 
           // interaction with mouse or not [Default true (decelerate to rolling init speed, and keep rolling with mouse).]
           keep: true
@@ -172,7 +178,7 @@
             <div class="row">
               <div class="col-6">
                 <div class="fact-icon">
-                  <i class="flaticon-worker"></i>
+                  <img height="60px" width="60px" src="{% static 'img/1.png' %}" alt="Image" />
                 </div>
                 <div class="fact-text">
                   <h2 data-toggle="counter-up">50</h2>
@@ -181,7 +187,7 @@
               </div>
               <div class="col-6">
                 <div class="fact-icon">
-                  <i class="flaticon-building"></i>
+                  <img height="60px" width="60px" src="{% static 'img/2.png' %}" alt="Image" />
                 </div>
                 <div class="fact-text">
                   <h2 data-toggle="counter-up">7</h2>
@@ -194,7 +200,7 @@
             <div class="row">
               <div class="col-6">
                 <div class="fact-icon">
-                  <i class="flaticon-address"></i>
+                  <img height="60px" width="60px" src="{% static 'img/3.png' %}" alt="Image" />
                 </div>
                 <div class="fact-text">
                   <h2 data-toggle="counter-up">7</h2>
@@ -203,7 +209,7 @@
               </div>
               <div class="col-6">
                 <div class="fact-icon">
-                  <i class="flaticon-crane"></i>
+                  <img height="60px" width="60px" src="{% static 'img/4.png' %}" alt="Image" />
                 </div>
                 <div class="fact-text">
                   <h2 data-toggle="counter-up">10</h2>

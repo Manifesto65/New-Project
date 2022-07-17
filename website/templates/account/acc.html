@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}Digital Guide Nepal{% endblock %}
+{%load static%}
+{%block content %}
+
+
+ <body>
+    
+        
+            <!-- Top Bar Start -->
+            {%include 'topnav.html'%}
+            <!-- Top Bar End -->
+
+
+            {%include 'navbar.html'%}  
+
+            <div class="page-header">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2>Our Projects</h2>
+                        </div>
+                        <div class="col-12">
+                            <a href="">Home</a>
+                            <a href="">Our Projects</a>
+                        </div>
+                    </div>
+                </div>
+             </div>
+
+
+            <div class="account-page">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-container">
+                                <div class="form-btn">
+                                    <span onclick="login()">Login</span>
+                                    <span onclick="register()">Register</span>
+                                    <hr id="Indicator">
+                                </div>
+                                <form id="LoginForm">
+                                    <input type="text" placeholder="Username">
+                                    <input type="password" placeholder="Password">
+                                    <button type="submit" class="btn">Login</button>
+                                    <a class="btn" href="">Forgot Password</a>
+                                </form>
+                                <form id="RegForm">
+                                    <input type="text" placeholder="Username">
+                                    <input type="email" placeholder="Email">
+                                    <input type="password" placeholder="Password">
+                                    <button type="submit" class="btn">Register</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    <script>
+        var LoginForm = document.getElementById("LoginForm");
+        var RegForm = document.getElementById("RegForm");
+        var Indicator = document.getElementById("Indicator");
+
+            function register(){
+                RegForm.style.transform = "translateX(0px)";
+                LoginForm.style.transform = "translateX(0px)";
+                Indicator.style.transform = "translateX(100px)";
+            }
+            function login(){
+                RegForm.style.transform = "translateX(300px)";
+                LoginForm.style.transform = "translateX(300px)";
+                Indicator.style.transform = "translateX(0px)";
+            }
+    </script>
+    
+</body>
+{%include 'footer.html'%}
+
+{%endblock%}
