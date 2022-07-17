@@ -2,6 +2,7 @@ from django.contrib import admin
 from . import models
 from mptt.admin import MPTTModelAdmin
 from django.utils.safestring import mark_safe
+from django.contrib.contenttypes.admin import GenericTabularInline
 
 
 @admin.register(models.About)
@@ -63,3 +64,19 @@ class ServiceAdmin(admin.ModelAdmin):
             height=150,
         )
         )
+
+
+class TeamInline(admin.TabularInline):
+    model = models.Team
+    fields = ('name', 'designation')
+
+
+class HomeAdmin(admin.ModelAdmin):
+    list_display = ['id', 'client', 'experts', 'running_project']
+    list_display_links = ['id']
+    list_editable = ['client', 'experts', 'running_project']
+    inlines = [TeamInline]
+
+
+admin.site.register(models.Home, HomeAdmin)
+admin.site.register(models.SocialLinks)

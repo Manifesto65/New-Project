@@ -17,21 +17,21 @@
         id="navbarCollapse"
       >
         <div class="navbar-nav mr-auto">
-          <a href="{%url 'website:homepage' %}" class="nav-item nav-link active"
+          <a href="{%url 'website:homepage' %}" class="nav-item nav-link  {% if request.resolver_match.view_name == 'website:homepage'%}active{%endif%}"
             >Home</a
           >
-          <a href="{%url 'website:about' %}" class="nav-item nav-link">About</a>
+          <a href="{%url 'website:about' %}" class="nav-item nav-link {% if request.resolver_match.view_name == 'website:about'%}active{%endif%}">About</a>
           <a href="{%url 'website:service_list' %}" class="nav-item nav-link"
             >Service</a
           >
-          <a href="team.html" class="nav-item nav-link">Team</a>
-          <a href="{%url 'website:project_list' %}" class="nav-item nav-link"
+          <a href="{%url 'website:teams' %}" class="nav-item nav-link {% if request.resolver_match.view_name == 'website:teams'%}active{%endif%}">Team</a>
+          <a href="{%url 'website:project_list' %}" class="nav-item nav-link {% if request.resolver_match.view_name == 'website:project_list'%}active{%endif%}"
             >Project</a
           >
-          <a href="{%url 'website:blog_list' %}" class="nav-item nav-link"
+          <a href="{%url 'website:blog_list' %}" class="nav-item nav-link {% if request.resolver_match.view_name == 'website:blog_list'%}active{%endif%}"
             >Blogs</a
           >
-          <a href="{%url 'website:contact' %}" class="nav-item nav-link"
+          <a href="{%url 'website:contact' %}" class="nav-item nav-link {% if request.resolver_match.view_name == 'website:contact'%}active{%endif%}"
             >Contact</a
           >
           {% if request.session.username %}
