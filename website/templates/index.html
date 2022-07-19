@@ -1,5 +1,8 @@
 {% extends 'base.html' %} {% block title %}Digital Guide Nepal{% endblock %}
-{%load static%} {%block content %}
+{%load static%}
+{%load sociallink%}
+
+{%block content %}
 <body>
   <div class="wrapper">
     <!-- Top Bar Start -->
@@ -132,8 +135,7 @@
         <div class="row align-items-center">
           <div class="col-lg-5 col-md-6">
             <div class="about-img">
-              <img
-                class="img-fluid"
+              <img class="img-fluid"
                 height="150"
                 width="100"
                 src="{{about.company_image.url}}"
@@ -181,7 +183,7 @@
                   <img height="60px" width="60px" src="{% static 'img/1.png' %}" alt="Image" />
                 </div>
                 <div class="fact-text">
-                  <h2 data-toggle="counter-up">50</h2>
+                  <h2 data-toggle="counter-up">{{totalexpert}}</h2>
                   <p>Expert Workers</p>
                 </div>
               </div>
@@ -190,7 +192,7 @@
                   <img height="60px" width="60px" src="{% static 'img/2.png' %}" alt="Image" />
                 </div>
                 <div class="fact-text">
-                  <h2 data-toggle="counter-up">7</h2>
+                  <h2 data-toggle="counter-up">{{home.client}}</h2>
                   <p>Happy Clients</p>
                 </div>
               </div>
@@ -203,7 +205,7 @@
                   <img height="60px" width="60px" src="{% static 'img/3.png' %}" alt="Image" />
                 </div>
                 <div class="fact-text">
-                  <h2 data-toggle="counter-up">7</h2>
+                  <h2 data-toggle="counter-up">{{totalprojects}}</h2>
                   <p>Completed Projects</p>
                 </div>
               </div>
@@ -212,7 +214,7 @@
                   <img height="60px" width="60px" src="{% static 'img/4.png' %}" alt="Image" />
                 </div>
                 <div class="fact-text">
-                  <h2 data-toggle="counter-up">10</h2>
+                  <h2 data-toggle="counter-up">{{home.running_project}}</h2>
                   <p>Running Projects</p>
                 </div>
               </div>
@@ -278,14 +280,14 @@
                 <p>{{team.designation}}</p>
               </div>
               <div class="team-social">
-                <a class="social-tw" href=""><i class="fab fa-twitter"></i></a>
-                <a class="social-fb" href=""
+                <a class="social-tw" href="{{team.id|get_link:'t'}}"><i class="fab fa-twitter"></i></a>
+                <a class="social-fb" href="{{team.id|get_link:'f'}}"
                   ><i class="fab fa-facebook-f"></i
                 ></a>
-                <a class="social-li" href=""
+                <a class="social-li" href="{{team.id|get_link:'lin'}}"
                   ><i class="fab fa-linkedin-in"></i
                 ></a>
-                <a class="social-in" href=""
+                <a class="social-in" href="{{team.id|get_link:'ins'}}"
                   ><i class="fab fa-instagram"></i
                 ></a>
               </div>
@@ -346,7 +348,7 @@
               </div>
               <div class="blog-title">
                 <h3>{{blog.blog_title}}</h3>
-                <a class="btn" href="{%url 'website:blog_detail' blog.id %}"
+                <a class="btn" href="{%url 'website:blog-detail' blog.id %}"
                   >+</a
                 >
               </div>

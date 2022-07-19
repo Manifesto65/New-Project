@@ -42,7 +42,7 @@
               </div>
               <div class="blog-title">
                 <h3>{{blog.blog_title}}</h3>
-                <a class="btn" href="{%url 'website:blog_detail' blog.id %}"
+                <a class="btn" href="{%url 'website:blog-detail' blog.id %}"
                   >+</a
                 >
               </div>
@@ -67,9 +67,19 @@
               </li>
               {% endif %}
 
-              <li class="page-item">
-                <a class="page-link" href="#">{{ blogs.number }}</a>
-              </li>
+              {% for i in blogs.paginator.page_range %}
+                {% if blogs.number == i %}
+                   <li class="page-item active" aria-current="page">
+                    <span class="page-link">
+                      {{ i }}
+                    <span class="sr-only">(current)</span>
+                      </span>
+                   </li>
+                   {% elif i > blogs.number|add:'-3' and i < blogs.number|add:'3' %}
+                   <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+
+                   {% endif %}
+                   {%endfor%}
               {% if blogs.has_next %}
               <li class="page-item">
                 <a class="page-link" href="?page={{ blogs.next_page_number }}"

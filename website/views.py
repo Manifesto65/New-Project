@@ -19,17 +19,24 @@ def home(request):
     teams = Team.objects.all()
     testimonials = Testimonial.objects.all()
     banners = Banner.objects.filter(is_active=True)
-    print(testimonials)
+    totalprojects = Project.objects.all().count()
+    totalexpert = Team.objects.all().count()
+    home = Home.objects.all()
+    home = home.first()
+    print(home)
     services = Services.objects.all()
     blogs = Blog.objects.all()
+
     data = {
         'about': about,
+        'totalprojects': totalprojects,
+        'totalexpert': totalexpert,
+        'home': home,
         'services': services,
         'blogs': blogs,
         'teams': teams,
         'banners': banners,
         'testimonials': testimonials
-
     }
 
     return render(request, "index.html", data)
@@ -112,6 +119,16 @@ class ServiceList(View):
         }
 
         return render(request, "service.html", data)
+
+
+class TeamList(View):
+    def get(self, request):
+        teams = Team.objects.all()
+        data = {
+            'teams': teams,
+        }
+
+        return render(request, "team.html", data)
 
 
 class ProjectList(View):
@@ -282,7 +299,8 @@ class BlogDetails(View):
         blog = Blog.objects.get(id=blog_id)
         total_comment = Comment.objects.filter(blog=blog).count()
         allcomments = blog.comments.filter(status=True)
-        page = request.GET.get('page', 1)
+        # page = request.GET.get('page', 1)
+        print(allcomments)
 
         blog_list = Blog.objects.all()
         comment_form = NewCommentForm()
@@ -302,26 +320,31 @@ class BlogDetails(View):
             'comment_form': comment_form,
             'allcomments': allcomments
         }
-        return render(request, "blog_detail.html", data)
+        return render(request, "blog-detail.html", data)
 
-    def post(self, request, *args, **kwargs):
-        return self.addcomment(request)
 
-    def addcomment(self, request):
+def addcomment(request):
+
+    if request.method == 'POST':
+
         if request.POST.get('action') == 'delete':
             id = request.POST.get('nodeid')
             print(id)
             c = Comment.objects.get(id=id)
             c.delete()
             return JsonResponse({'remove': id})
-
-        comment_form = NewCommentForm(request.POST)
-        print(comment_form)
-        if comment_form.is_valid():
-            user_comment = comment_form.save(commit=False)
-            user_comment.user = request.user
-            user_comment.save()
-            blog = comment_form.cleaned_data.get('blog')
-            print(blog)
-            user = request.user.username
-            return redirect("website:blog_detail", blog_id=blog.id)
+        else:
+            comment_form = NewCommentForm(request.POST)
+            print(comment_form)
+            if comment_form.is_valid():
+                user_comment = comment_form.save(commit=False)
+                username = request.session['username']
+                result = comment_form.cleaned_data.get('content')
+                user = User.objects.get(username=username)
+                print(user)
+                user_comment.user = user
+                user_comment.save()
+                blog = comment_form.cleaned_data.get('blog')
+                print(blog)
+                user = request.user.username
+                return JsonResponse({'result': result, 'user': user})

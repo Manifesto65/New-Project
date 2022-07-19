@@ -1,9 +1,31 @@
 from django.db import models, transaction
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
+from django.core.validators import MaxValueValidator, MinValueValidator
+
+from django.contrib.contenttypes.fields import GenericRelation
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+from django.forms import ValidationError
 from mptt.models import MPTTModel, TreeForeignKey
 
 # Create your models here.
+
+
+class Home(models.Model):
+    client = models.PositiveIntegerField(
+        blank=True, null=True)
+    running_project = models.PositiveIntegerField(blank=True, null=True, )
+    experts = models.PositiveIntegerField(blank=True, null=True, validators=[
+        MaxValueValidator(1000), MinValueValidator(0)])
+
+    def save(self, *args, **kwargs):
+        if not self.pk and Home.objects.exists():
+            # if you'll not check for self.pk
+            # then error will also raised in update of exists model
+            raise ValidationError(
+                'There is can be only one Home instance')
+        return super(Home, self).save(*args, **kwargs)
 
 
 class User(AbstractUser):
@@ -67,9 +89,20 @@ class Team(models.Model):
     name = models.CharField(max_length=50)
     designation = models.CharField(max_length=50)
     image = models.ImageField(upload_to='uploads/team')
+    team = models.ForeignKey(Home, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
+
+
+class SocialLinks(models.Model):
+    team = models.ForeignKey(
+        Team, on_delete=models.CASCADE, null=True, blank=True)
+    facebook = models.URLField(max_length=200, null=True, blank=True)
+    instagram = models.URLField(max_length=200, null=True, blank=True)
+    twitter = models.URLField(max_length=200, null=True, blank=True)
+    linkedin = models.URLField(max_length=200, null=True, blank=True)
+    youtube = models.URLField(max_length=200, null=True, blank=True)
 
 
 class ContactUs(models.Model):
@@ -104,7 +137,8 @@ class Comment(MPTTModel):
     content = models.TextField()
     blog = models.ForeignKey(
         Blog, on_delete=models.CASCADE, related_name='comments')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE)
     parent = TreeForeignKey('self', null=True, blank=True,
                             related_name="children", on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
