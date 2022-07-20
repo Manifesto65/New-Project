@@ -1,5 +1,7 @@
 {% extends 'base.html' %} {% block title %}Digital Guide Nepal{% endblock %}
-{%load static%} {%block content%}
+{%load static%} 
+{%load sociallink%}
+{%block content%}
 
 <style>
   @media screen and (min-width: 600px) {
@@ -29,7 +31,7 @@
   .node-content {
     padding-left: 64px;
   }
-.avatar_comment,.avatar_single {
+.avatar_comment,.avatar_comment1,.avatar_single {
     height: 48px;
     width: 48px;
     background-color: #000;
@@ -100,18 +102,20 @@
               <!-- End post content -->
             </article>
             <!-- End blog post -->
+            <span id="thumbs" data-value="{{blog.id}}"></span>
 
             <div class="comments">
               {% with allcomments.count as total_comments %}
-              <h4 class="comments-count">
+              <h4 class="comments-count" id="tcomment">
                 {{ total_comments }} comment{{ total_comments|pluralize }}
               </h4>
               {% endwith %} 
 
+
               <div class="col-md-8">
 
                 {% load mptt_tags %}
-                <div class="allcommments">
+                <div class="allcommments" style="width: 158%;">
 
                   {% recursetree allcomments %}
                   <div id="{{ node.id }}" class="my-2 p-2" style="border: 0px solid grey">
@@ -132,22 +136,30 @@
                     </div>
 
                     <div class="node-content">{{ node.content }}</div>
+                    
 
                     <div class="d-flex flex-row-reverse">
+                      {%if node.user.username%}
                       {% if node.level < 3 %}
-                      <button class="btn btn-primary btn-sm" onclick="myfunction('{{ node.id }}')">Reply</button>
-                      {% endif %}
                       {% if node.user.username|stringformat:"s" == request.user.username  %}
-                      <button class="btn btn-secondary btn-sm mr-2" onclick="deleteComment('{{ node.id }}')">Delete</button>
-                      {% endif %}
+                      <button class="btn btn-primary btn-sm " onclick="myFunction('{{ node.id }}')" >Reply</button>
+  
+                      {%endif%}
+                     {% endif %}
+                      {% if node.user.username|stringformat:"s" == request.user.username  %} 
+                      <button class="btn btn-danger btn-sm mr-2" onclick="deleteComment('{{ node.id }}')">Delete</button>
+                       {% endif %} 
+                       {%endif%}
                     </div>
+                   
                     <hr />
-                  </div>
-                  {% if not node.is_leaf_node %}
+                    {% if not node.is_leaf_node %}
                   <div class="children pl-2 pl-md-5">
                     {{ children }}
                   </div>
                   {% endif %}
+                  </div>
+                  
                   <form id="replyform" method="post" class="d-none" id="{{node.id}}"> 
                       {% csrf_token %} 
                       <select name="parent" class="d-none" id="id_parent"> 
@@ -168,6 +180,7 @@
 
                 </div>
               </div>
+              
 
               <div class="py-4">
                 <nav aria-label="Page navigation example">
@@ -213,15 +226,10 @@
                   {% endif %}
                 </nav>
               </div>
-
+              {%if request.session.username %}
               <form id="commentform" class="commentform" method="post" action="{% url 'website:blog-detail' blog.id %}">
                 {% csrf_token %}
-                {%with allcomments.count as total_comments%}
-                <p>
-                  {{total_comments}} comment{{total_comments|pluralize}}
-
-                </p>
-                {%endwith%}
+             
                 <select name="blog" class="d-none" id="id_blog">
                   <option value="{{blog.id}}" id="blog_id"  selected="{{blog.id}}"></option>
                 </select>
@@ -229,9 +237,9 @@
                 {{comment_form.parent}}
                 <div class="d-flex">
                   {% if request.user.avatar %}
-                        <img class="avatar_comment align-self-center" src="{{ request.user.avatar.url }}">
+                        <img class="avatar_comment1 align-self-center" src="{{ request.user.avatar.url }}">
                         {% else %}
-                        <img class="avatar_comment align-self-center" src="{%static 'img/user.jpg'%}">
+                        <img class="avatar_comment1 align-self-center" src="{%static 'img/user.jpg'%}">
                         {%endif%}
                   {{comment_form.content}}
                 </div>
@@ -239,10 +247,15 @@
                   <button value="commentform" id="newcomment" type="submit" class="newcomment btn btn-primary">Submit</button>
                 </div>
               </form>
+              {%else%}
+              <h5 class="ml-4 mt-3 ">Sign in to comment <a href="{%url 'website:account'%}" class="btn btn-link">click here</a></h5>
+              {%endif%}
+              
 
               <!-- End blog comments -->
             </div>
           </div>
+
 
           <div class="col-lg-4">
             <div class="sidebar">
@@ -325,7 +338,7 @@
                         </div>').insertBefore('#' + placement);
 
                       $('.commentform').trigger("reset");
-                      formExit()
+                      formExit();
 
                     },
                     error: function (xhr, errmsg, err) {
@@ -334,28 +347,112 @@
                   });
                 });
 
+     
+                
+
                  function deleteComment(id) {
                   console.log(id)
+                  var blogid = document.getElementById('thumbs').getAttribute('data-value');
                   $.ajax({
                     type: 'POST',
-                    url: '{% url "website:blog-detail" blog.id %}',
+                    url: '{% url "website:addcomment" %}',
                     data: {
+                      blogid: blogid,
                       nodeid: id,
                       action: 'delete',
                       csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
                     },
                     success: function (json) {
                       $("#" + json['remove']).remove();
+                      document.getElementById('tcomment').innerText= json['total_comment']+ "  comments";
+
                     },
                     error: function (xhr, errmsg, err) {}
                   });
                 }
+
                 
+                
+                function formExit() {
+                    document.getElementById("newcommentform").remove();
+                   
+                }
+                
+                 function myFunction(id) {
+                  if (document.contains(document.getElementById("newcommentform"))) {
+                    document.getElementById("newcommentform").remove();
+                  }
+                  var blogid = document.getElementById('thumbs').getAttribute('data-value');
+                  console.log(blogid)
+                  var imgFullURL = $('img.avatar_comment1')[0].src;
+                  console.log("image url "+ imgFullURL)
+                  var d1 = document.getElementById(id);
+                
+                
+                  d1.insertAdjacentHTML('afterend',
                   
+                    '<form id="newcommentform" class="commentform" method="post" > \
+                      {% csrf_token %} \
+                      <select name="blog" class="d-none" id="id_blog"> \
+                        <option value="' + blogid + '" selected="' + blogid + '"></option> \
+                      </select> <label class="small font-weight-bold"></label> \
+                      <select name="parent" class="d-none" id="id_parent"> \
+                        <option value="' + id + '" selected="' + id + '"></option> \
+                      </select> \
+                      <div class="d-flex"> \
+                        <img class="avatar_comment align-self-center" src="' + imgFullURL + '"> \
+                        <textarea name="content" id="id_content" cols="40" rows="1" class="ml-3 mb-3 form-control border-0 comment-add rounded-0" placeholder="Add a public comment" required="" ></textarea> \
+                      </div> \
+                      <div class="d-flex flex-row-reverse"> \
+                      <button type="button" class="btn btn-outline-secondary btn-sm" onclick="formExit()">Close</button> \
+                        <button value="newcommentform" id="newcommentinner" type="submit" class="mr-1 btn-sm newcomment btn btn-primary ">Submit</button> \
+                      </div> \
+                    </form>'
+                  );
+                }   
+                
+
+        
 
 
 
+                function myFunction1(id,content) {
+                  if (document.contains(document.getElementById("newcommentform"))) {
+                    document.getElementById("newcommentform").remove();
+                  }
+                  var blogid = document.getElementById('thumbs').getAttribute('data-value');
+                  console.log(blogid)
+                  var imgFullURL = $('img.avatar_comment')[0].src;
+                  var d2 = document.getElementById(id); 
+                  console.log(id)  
+                  console.log(content) 
+                 
+                            
+                  d2.insertAdjacentHTML('afterend',
+                   
+                    '<form id="newcommentform" class="commentform" method="post"  > \
+                      {% csrf_token %} \
+                      <select name="blog" class="d-none" id="id_blog"> \
+                        <option value="' + blogid + '" selected="' + blogid + '"></option> \
+                      </select> <label class="small font-weight-bold"></label> \
+                      <select name="parent" class="d-none" id="id_parent"> \
+                        <option value="' + id + '" selected="' + id + '"></option> \
+                      </select> \
+                      <div class="d-flex"> \
+                        <img class="avatar_comment align-self-center" src="' + imgFullURL + '"> \
+                        <textarea name="content"  cols="40" rows="1" class="ml-3 mb-3 form-control border-0 comment-add rounded-0" placeholder="Add a public comment" required="" id="id_content1"></textarea> \
+                      </div> \
+                      <div class="d-flex flex-row-reverse"> \
+                      <button type="button" class="btn btn-outline-secondary" onclick="formExit()">Close</button> \
+                        <button value="newcommentform" id="newcommentinner1" onclick="" type="submit" class="mr-1 newcomment btn btn-primary ">Submit</button> \
+                      </div> \
+                    </form>'
 
+                  );
+                  document.getElementById("id_content1").innerText = content;
+
+                } 
+                          $('.commentform').trigger("reset");
 
 
               </script>

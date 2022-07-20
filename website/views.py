@@ -322,6 +322,19 @@ class BlogDetails(View):
         }
         return render(request, "blog-detail.html", data)
 
+    def post(self, request, *args, **kwargs):
+        return self.updatecomment(request)
+
+    def updatecomment(request):
+        comment_form = NewCommentForm(request.POST)
+        print(comment_form)
+        if comment_form.is_valid():
+            user_comment = comment_form.save(commit=False)
+            username = request.session['username']
+            result = comment_form.cleaned_data.get('content')
+
+            return JsonResponse({'result': result, 'user': user})
+
 
 def addcomment(request):
 
@@ -329,10 +342,14 @@ def addcomment(request):
 
         if request.POST.get('action') == 'delete':
             id = request.POST.get('nodeid')
-            print(id)
             c = Comment.objects.get(id=id)
             c.delete()
-            return JsonResponse({'remove': id})
+            blog_id = request.POST.get('blogid')
+            blog = Blog.objects.get(id=blog_id)
+            total_comment = Comment.objects.filter(blog=blog).count()
+            print(id)
+            print(total_comment)
+            return JsonResponse({'remove': id, 'total_comment': total_comment})
         else:
             comment_form = NewCommentForm(request.POST)
             print(comment_form)

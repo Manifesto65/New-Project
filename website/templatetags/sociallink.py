@@ -1,5 +1,5 @@
 from django import template
-from website.models import SocialLinks, Team
+from website.models import SocialLinks, Team, Comment
 
 register = template.Library()
 
@@ -43,3 +43,6 @@ def get_link(team_id, lk):
         return link
     else:
         return ''
+
+
+
