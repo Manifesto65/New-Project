@@ -81,3 +81,5 @@ class HomeAdmin(admin.ModelAdmin):
 admin.site.register(models.Home, HomeAdmin)
 admin.site.register(models.SocialLinks)
 admin.site.register(models.Comment)
+admin.site.register(models.Contact)
+admin.site.register(models.ContactUs)

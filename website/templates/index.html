@@ -12,50 +12,69 @@
     {%include 'navbar.html'%}
 
     <!-- Carousel Start -->
-    <div id="carousel" class="carousel slide" data-ride="carousel">
-      <ol class="carousel-indicators">
-        <li data-target="#carousel" data-slide-to="0" class="active"></li>
-        <li data-target="#carousel" data-slide-to="1"></li>
-        <li data-target="#carousel" data-slide-to="2"></li>
-      </ol>
-
-      <div class="carousel-inner">
-        {%for banner in banners%}
-        <div class="carousel-item {% if forloop.first %} active{% endif %}">
-          <img src="{{banner.image.url}}" alt="Carousel Image" />
-          <div class="carousel-caption">
-            <p class="animated fadeInRight">We Are Professional</p>
-            <h1 class="animated fadeInLeft">For Your Dream Project</h1>
-            <a
-              class="btn animated fadeInUp"
-              href="https://htmlcodex.com/construction-company-website-template"
-              >Get A Quote</a
-            >
+  <br>
+    
+    <div class="container">
+      <div class="row">
+          <div class="col-md-6" >
+              <div class="section-header text-left">
+                  <h2>Welcome to Digital Guide Nepal</h2>
+              </div>
+              <div class="row align-items-center">
+                <div class="about-text">
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem.
+                    </p>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulputate. Aliquam metus tortor, auctor id gravida condimentum, viverra quis sem. Curabitur non nisl nec nisi scelerisque maximus. Aenean consectetur convallis porttitor. Aliquam interdum at lacus non blandit.
+                    </p>
+                </div>
+              </div>
           </div>
-        </div>
-
-        {%endfor%}
+          <div class="col-md-6">
+            <div class="about-text">
+              <div class="row align-items-center">
+                <span style="font-weight: bold;" class="Sphere"></span>
+              </div>
+            </div>
+          </div>
       </div>
+  </div>
+    
 
-      <a
-        class="carousel-control-prev"
-        href="#carousel"
-        role="button"
-        data-slide="prev"
-      >
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-      </a>
-      <a
-        class="carousel-control-next"
-        href="#carousel"
-        role="button"
-        data-slide="next"
-      >
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-      </a>
-    </div>
+  <!-- Including the TagCloud.js script CDN in the document    -->
+  <script src="https://cdn.jsdelivr.net/npm/TagCloud@2.2.0/dist/TagCloud.min.js"> </script>
+  <script>
+      const Texts = [
+          'SEO', 'HOSTING', 'WEB-SITE',
+          'S-MEDIA-MANAGEMENT', 'DOMAIN-NAME', 'DATA-MANAGEMENT',
+          'SECURITY-MANAGEMENT', 'APP-DEVELOPMENT',
+          'SYSTEM-DEVELOPMENT', 'MAINTENANCE', '2D/3D-ANIMATION',
+          'GRAPHIC DESIGN', 'ADS-VIDEO', 'SHORT-FILMS', 'ALBUM-SONG'
+      ];
+
+      var tagCloud = TagCloud('.Sphere', Texts, {
+
+          // Sphere radius in px
+          radius: 150,
+
+          // animation speed
+          // slow, normal, fast
+          maxSpeed: 'normal',
+          initSpeed: 'fast',
+
+          // Rolling direction [0 (top) , 90 (left), 135 (right-bottom)] 
+          direction: 90,
+
+          // interaction with mouse or not [Default true (decelerate to rolling init speed, and keep rolling with mouse).]
+          keep: true
+
+      });
+
+      // Giving color to each text in sphere
+      var color = '#DA1212 ';
+      document.querySelector('.Sphere').style.color = color;
+    </script>
 
     <!-- Carousel End -->
 
@@ -119,14 +138,27 @@
               <img class="img-fluid"
                 height="150"
                 width="100"
-                src="{{about.company_logo.url}}"
+                src="{{about.company_image.url}}"
                 alt="Image"
               />
             </div>
           </div>
           <div class="col-lg-7 col-md-6">
             <div class="section-header text-left">
-              <p>{{about.company_name}}</p>
+              <h2>
+                <div class="row">
+                  <div class="col-md-2">
+                    <img
+                      class="img-fluid"
+                      height="150"
+                      width="100"
+                      src="{{about.company_logo.url}}"
+                      alt="Image"
+                    />
+                  </div>
+                  <div class="col-md-10">{{about.company_name}}</div>
+                </div>
+              </h2>
             </div>
             <div class="about-text">
               <p>{{about.company_description}}</p>
@@ -148,7 +180,7 @@
             <div class="row">
               <div class="col-6">
                 <div class="fact-icon">
-                  <i class="flaticon-worker"></i>
+                  <img height="60px" width="60px" src="{% static 'img/1.png' %}" alt="Image" />
                 </div>
                 <div class="fact-text">
                   <h2 data-toggle="counter-up">{{totalexpert}}</h2>
@@ -157,7 +189,7 @@
               </div>
               <div class="col-6">
                 <div class="fact-icon">
-                  <i class="flaticon-building"></i>
+                  <img height="60px" width="60px" src="{% static 'img/2.png' %}" alt="Image" />
                 </div>
                 <div class="fact-text">
                   <h2 data-toggle="counter-up">{{home.client}}</h2>
@@ -170,7 +202,7 @@
             <div class="row">
               <div class="col-6">
                 <div class="fact-icon">
-                  <i class="flaticon-address"></i>
+                  <img height="60px" width="60px" src="{% static 'img/3.png' %}" alt="Image" />
                 </div>
                 <div class="fact-text">
                   <h2 data-toggle="counter-up">{{totalprojects}}</h2>
@@ -179,7 +211,7 @@
               </div>
               <div class="col-6">
                 <div class="fact-icon">
-                  <i class="flaticon-crane"></i>
+                  <img height="60px" width="60px" src="{% static 'img/4.png' %}" alt="Image" />
                 </div>
                 <div class="fact-text">
                   <h2 data-toggle="counter-up">{{home.running_project}}</h2>
@@ -205,7 +237,7 @@
           <div class="col-lg-4 col-md-6 wow fadeInUp">
             <div class="service-item">
               <div class="service-img">
-                <img src="{{service.service_image.url}}" alt="Image" />
+                <img height="200px" width="200px" src="{{service.service_image.url}}" alt="Image" />
                 <div class="service-overlay">
                   <p>{{service.description|truncatechars:250}}</p>
                 </div>
@@ -227,55 +259,7 @@
 
     <!-- Service End -->
 
-    <!-- Video Start -->
-    <div class="video wow fadeIn" data-wow-delay="0.1s">
-      <div class="container">
-        <button
-          type="button"
-          class="btn-play"
-          data-toggle="modal"
-          data-src="https://www.youtube.com/embed/DWRcNpR6Kdc"
-          data-target="#videoModal"
-        >
-          <span></span>
-        </button>
-      </div>
-    </div>
 
-    <div
-      class="modal fade"
-      id="videoModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-body">
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-            <!-- 16:9 aspect ratio -->
-            <div class="embed-responsive embed-responsive-16by9">
-              <iframe
-                class="embed-responsive-item"
-                src=""
-                id="video"
-                allowscriptaccess="always"
-                allow="autoplay"
-              ></iframe>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Video End -->
 
     <!-- Team Start -->
     <div class="team">
@@ -323,9 +307,12 @@
                           
                             <div class="testimonial-slider-nav">
                               {%for t in testimonials%}
-                                <div class="slider-nav"><img src="{{t.image.url}}"  alt="Testimonial"></div>
+                                <div class="slider-nav">
+                                  <img width="150" height="200" src="{{t.image.url}}"  alt="Testimonial">
+                                </div>
+                              {%endfor%}
                             </div>
-                            {%endfor%}
+                            
                         </div>
                     </div>
                     <div class="row">
@@ -357,7 +344,7 @@
           <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
             <div class="blog-item">
               <div class="blog-img">
-                <img src="{{blog.blog_image.url}}" alt="Image" />
+                <img height="200px" width="200px" src="{{blog.blog_image.url}}" alt="Image" />
               </div>
               <div class="blog-title">
                 <h3>{{blog.blog_title}}</h3>
@@ -370,7 +357,7 @@
                 <p>In<a href="">Construction</a></p>
               </div>
               <div class="blog-text">
-                <p>{{blog.blog_description|truncatechars:250}}</p>
+                <p>{{blog.blog_description|truncatechars:200}}</p>
               </div>
             </div>
           </div>

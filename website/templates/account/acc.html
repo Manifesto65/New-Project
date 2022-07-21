@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% block title %}Digital Guide Nepal{% endblock %}
+{%block content %}
+ 
+ 
+ <body>
+   
+        
+            <!-- Top Bar Start -->
+            {%include 'topnav.html'%}
+            <!-- Top Bar End -->
+ 
+ 
+            {%include 'navbar.html'%}  
+        
+             <!-- Page Header Start -->
+            <div class="page-header">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2>Account</h2>
+                        </div>
+                        <div class="col-12">
+                            <a href="">Home</a>
+                            <a href="">Account</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+      <!-- Page Header End -->
+  
+      <div class="toplog">
+        <div class="section">
+          <div class="container">
+            <div class="row full-height justify-content-center">
+              <div class="col-12 text-center align-self-center py-5">
+                <div class="section pb-5 pt-5 pt-sm-2 text-center">
+                  <h6 class="mb-0 pb-3"><span>Log In </span><span>Sign Up</span></h6>
+                  <input class="checkbox" type="checkbox" id="reg-log" name="reg-log" />
+                  <label for="reg-log"></label>
+                  <div class="card-3d-wrap mx-auto">
+                    <div class="card-3d-wrapper">
+                      <div class="card-front">
+                        <div class="center-wrap">
+                          <div class="section text-center">
+                            <h4 class="mb-4 pb-3">Log In</h4>
+                            <form method="post">
+                              {% csrf_token %}
+                                <div class="form-group">
+                                  <input type="name" name="user" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off">
+                                  <i class="input-icon uil uil-at"></i>
+                                </div>
+                                <div class="form-group mt-2">
+                                  <input type="password" name="pass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off">
+                                  <i class="input-icon uil uil-lock-alt"></i>
+                                </div>
+                                <a class="btn mt-4" type="submit" class="submit">submit</a>
+                                <p class="mb-0 mt-4 text-center"><a href="{% url 'reset_password'%}" class="link">Forgot your password?</a></p>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-back">
+                        <div class="center-wrap">
+                          <div class="section text-center">
+                            <h4 class="mb-4 pb-3">Sign Up</h4>
+                            <form method="post">
+                              {% csrf_token %}
+                                <div class="form-group">
+                                  <input type="text" name="user" class="form-style" placeholder="Your Full Name" id="logname" autocomplete="off">
+                                  <i class="input-icon uil uil-user"></i>
+                                </div>
+                                <div class="form-group mt-2">
+                                  <input type="email" name="email" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off">
+                                  <i class="input-icon uil uil-at"></i>
+                                </div>
+                                <div class="form-group mt-2">
+                                  <input type="password" name="pass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off">
+                                  <i class="input-icon uil uil-lock-alt"></i>
+                                </div>
+                                <a href="#" class="btn mt-4" type="submit" class="submit">submit</a>
+                            </form>    
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+    <script>
+        document.querySelector('.img__btn').addEventListener('click', function() {
+            document.querySelector('.cont').classList.toggle('s--signup');
+        });
+    </script>
+ 
+        
+ 
+ 
+    
+    {%if error %}
+<script>
+  swal({
+    icon: "error",
+    title: "{{error}}",
+  });
+</script>
+{%endif%}
+
+<!-- Footer Start -->
+{%include 'footer.html'%}
+<!-- Footer End -->
+ 
+{%endblock%}
+</body>
+   
+
+

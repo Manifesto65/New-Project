@@ -21,7 +21,6 @@ class NewCommentForm(forms.ModelForm):
 
         self.fields['parent'].widget.attrs.update(
             {'class': 'd-none'})
-
         self.fields['parent'].label = ''
         self.fields['parent'].required = False
 

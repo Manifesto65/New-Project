@@ -181,7 +181,7 @@ class BlogList(View):
 
 class Account(View):
     def get(self, request):
-        return render(request, 'account/account.html')
+        return render(request, 'account/acc.html')
 
     def post(self, request):
         postData = request.POST
