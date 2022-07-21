@@ -68,7 +68,7 @@ class ServiceAdmin(admin.ModelAdmin):
 
 class TeamInline(admin.TabularInline):
     model = models.Team
-    fields = ('name', 'designation','image')
+    fields = ('name', 'designation')
 
 
 class HomeAdmin(admin.ModelAdmin):
@@ -80,8 +80,6 @@ class HomeAdmin(admin.ModelAdmin):
 
 admin.site.register(models.Home, HomeAdmin)
 admin.site.register(models.SocialLinks)
-admin.site.register(models.ContactUs)
+admin.site.register(models.Comment)
 admin.site.register(models.Contact)
-admin.site.register(models.Testimonial)
-admin.site.register(models.User)
-
+admin.site.register(models.ContactUs)

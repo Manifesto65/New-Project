@@ -1,5 +1,5 @@
 from django import template
-from website.models import SocialLinks, Team
+from website.models import SocialLinks, Team, Comment
 
 register = template.Library()
 
@@ -11,6 +11,8 @@ def get_link(team_id, lk):
     team = Team.objects.get(id=team_id)
 
     l = SocialLinks.objects.filter(team=team)
+    print(l)
+
     if lk == 't' and l.exists():
         l = l.first()
         if l.twitter:
@@ -41,3 +43,6 @@ def get_link(team_id, lk):
         return link
     else:
         return ''
+
+
+
