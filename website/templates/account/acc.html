@@ -47,14 +47,15 @@
                             <form method="post">
                               {% csrf_token %}
                                 <div class="form-group">
-                                  <input type="name" name="user" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off">
+                                  <input type="name" name="user" class="form-style" placeholder="Your Username" id="logemail" autocomplete="off">
                                   <i class="input-icon uil uil-at"></i>
                                 </div>
+				<input type="hidden" id="custId" name="choice" value="login">
                                 <div class="form-group mt-2">
                                   <input type="password" name="pass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off">
                                   <i class="input-icon uil uil-lock-alt"></i>
                                 </div>
-                                <a class="btn mt-4" type="submit" class="submit">submit</a>
+                                <a class="btn mt-4" ><input type="submit"></a>
                                 <p class="mb-0 mt-4 text-center"><a href="{% url 'reset_password'%}" class="link">Forgot your password?</a></p>
                             </form>
                           </div>
@@ -67,9 +68,10 @@
                             <form method="post">
                               {% csrf_token %}
                                 <div class="form-group">
-                                  <input type="text" name="user" class="form-style" placeholder="Your Full Name" id="logname" autocomplete="off">
+                                  <input type="text" name="user" class="form-style" placeholder="Username" id="logname" autocomplete="off">
                                   <i class="input-icon uil uil-user"></i>
                                 </div>
+				<input type="hidden" id="custId" name="choice" value="signup">
                                 <div class="form-group mt-2">
                                   <input type="email" name="email" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off">
                                   <i class="input-icon uil uil-at"></i>
@@ -78,7 +80,7 @@
                                   <input type="password" name="pass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off">
                                   <i class="input-icon uil uil-lock-alt"></i>
                                 </div>
-                                <a href="#" class="btn mt-4" type="submit" class="submit">submit</a>
+                               <a class="btn mt-4" ><input type="submit"></a>
                             </form>    
                           </div>
                         </div>
@@ -91,8 +93,7 @@
           </div>
         </div>
       </div>
- 
-    <script>
+   <script>
         document.querySelector('.img__btn').addEventListener('click', function() {
             document.querySelector('.cont').classList.toggle('s--signup');
         });
@@ -102,7 +103,16 @@
  
  
     
-    {%if error %}
+
+
+<!-- Footer Start -->
+{%include 'footer.html'%}
+<!-- Footer End -->
+ 
+
+</body>
+   
+{%if error %}
 <script>
   swal({
     icon: "error",
@@ -110,13 +120,5 @@
   });
 </script>
 {%endif%}
-
-<!-- Footer Start -->
-{%include 'footer.html'%}
-<!-- Footer End -->
- 
 {%endblock%}
-</body>
-   
-
 

@@ -24,8 +24,8 @@ def home(request):
     home = Home.objects.all()
     home = home.first()
     print(home)
-    services = Services.objects.all()
-    blogs = Blog.objects.all()
+    services = Services.objects.all()[:3]
+    blogs = Blog.objects.all()[:3]
 
     data = {
         'about': about,
@@ -111,7 +111,7 @@ class ContactUsView(View):
 
 class ServiceList(View):
     def get(self, request):
-        p = Paginator(Services.objects.all(), 1)
+        p = Paginator(Services.objects.all(), 3)
         page = request.GET.get('page')
         services = p.get_page(page)
         data = {
@@ -133,7 +133,7 @@ class TeamList(View):
 
 class ProjectList(View):
     def get(self, request):
-        p = Paginator(Project.objects.all(), 1)
+        p = Paginator(Project.objects.all(), 3)
         page = request.GET.get('page')
         projects = p.get_page(page)
         data = {
@@ -170,7 +170,7 @@ class BlogList(View):
 
         # Set up Pagination
 
-        p = Paginator(Blog.objects.all(), 1)
+        p = Paginator(Blog.objects.all(), 3)
         page = request.GET.get('page')
         blogs = p.get_page(page)
         data = {
@@ -210,7 +210,7 @@ class Account(View):
             else:
                 error_message = 'Username or password is invalid'
 
-            return render(request, 'account/account.html', {'error': error_message, 'value': value})
+            return render(request, 'account/acc.html', {'error': error_message, 'value': value})
 
         if choice == "signup":
             username = postData.get('user')
@@ -246,7 +246,7 @@ class Account(View):
                 user.save()
                 return redirect('website:account')
 
-        return render(request, 'account/account.html', {'error': error_message, 'value': value})
+        return render(request, 'account/acc.html', {'error': error_message, 'value': value})
 
 
 def logout(request):
