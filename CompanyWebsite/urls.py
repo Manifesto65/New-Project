@@ -18,11 +18,11 @@ from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 
-from . import settings
+from CompanyWebsite import settings
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('dgnadmin/', admin.site.urls),
     path('', include('website.urls', namespace="website")),
     path('reset_password/',
          auth_views.PasswordResetView.as_view(

@@ -9,9 +9,9 @@
                     <p><i class="fa fa-envelope"></i>digitalguidenp.com</p>
                     <div class="footer-social">
                         <a href=""><i class="fab fa-twitter"></i></a>
-                        <a href=""><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.facebook.com/digitalguidenp"><i class="fab fa-facebook-f"></i></a>
                         <a href=""><i class="fab fa-youtube"></i></a>
-                        <a href=""><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.instagram.com/digitalguidenp/"><i class="fab fa-instagram"></i></a>
                         <a href=""><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
@@ -19,21 +19,18 @@
             <div class="col-md-6 col-lg-3">
                 <div class="footer-link">
                     <h2>Services Areas</h2>
-                    <a href="">Web-Site</a>
-                    <a href="">Software-Development</a>
-                    <a href="">Social-Media-Management</a>
-                    <a href="">2D/3D-Animation</a>
-                    <a href="">Graphic-Design</a>
+                    {%for s in services%}
+                    <a href="{%url 'website:service_detail' s.id %}">{{s.name}}</a>
+                    {%endfor%}
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
                 <div class="footer-link">
                     <h2>Useful Pages</h2>
-                    <a href="">About Us</a>
-                    <a href="">Contact Us</a>
-                    <a href="">Our Team</a>
-                    <a href="">Projects</a>
-                    <a href="">Testimonial</a>
+                    <a href="{% url 'website:about'%}">About Us</a>
+                    <a href="{% url 'website:contact'%}">Contact Us</a>
+                    <a href="{% url 'website:teams'%}">Our Team</a>
+                    <a href="{% url 'website:project_list'%}">Projects</a>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
@@ -44,11 +41,10 @@
     </div>
     <div class="container footer-menu">
         <div class="f-menu">
-            <a href="">Terms of use</a>
-            <a href="">Privacy policy</a>
-            <a href="">Cookies</a>
-            <a href="">Help</a>
-            <a href="">FQAs</a>
+            <a href="/">Terms of use</a>
+            <a href="/">Privacy policy</a>
+            <a href="/">Help</a>
+            <a href="/">FQAs</a>
         </div>
     </div>
     <div class="container copyright">

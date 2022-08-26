@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import (Search, TeamList, home, addcomment, About, ContactUsView, ServiceList, BlogList, BlogDetails,
-                    ServiceDetails, Account, logout, userprofile, UserUpdateView, ProjectList, ProjectDetails)
+from website.views import (Search, TeamList, home, addcomment, About, ContactUsView, ServiceList, BlogList, BlogDetails,
+                           ServiceDetails, Account, logout, userprofile, UserUpdateView, ProjectList, ProjectDetails)
 app_name = "website"
 urlpatterns = [
     path('', home, name="homepage"),
@@ -25,3 +25,4 @@ urlpatterns = [
 
 
 ]
+handler404 = 'website.views.custom_page_not_found_view'

@@ -1,17 +1,23 @@
 from django.views import generic
 from django.urls import reverse
 from django.shortcuts import render, redirect
-from .forms import NewCommentForm
+from website.forms import NewCommentForm
 from django.contrib.auth.hashers import make_password, check_password
 from django.views import View
-from .models import About as a
-from .models import *
-from django.contrib.auth.decorators import login_required
-from .forms import UserForm
+from website.models import About as a
+from website.models import *
+from website.forms import UserForm
 from django.http import JsonResponse
 
 # Import Pagination Stuff
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.paginator import Paginator
+
+
+def custom_page_not_found_view(request, exception):
+    return render(request, "404.html", {})
+
+
+services = Services.objects.all()
 
 
 def home(request):
@@ -46,7 +52,8 @@ class About(View):
     def get(self, request):
         about = a.objects.get(is_active=True)
         data = {
-            'about': about
+            'about': about,
+            'services': services
         }
         return render(request, "about.html", data)
 
@@ -55,7 +62,8 @@ class ContactUsView(View):
     def get(self, request):
         contact = Contact.objects.get(status=True)
         data = {
-            'contact': contact
+            'contact': contact,
+            'services': services
         }
 
         return render(request, "contact.html", data)
@@ -126,6 +134,7 @@ class TeamList(View):
         teams = Team.objects.all()
         data = {
             'teams': teams,
+            'services': services
         }
 
         return render(request, "team.html", data)
@@ -137,7 +146,8 @@ class ProjectList(View):
         page = request.GET.get('page')
         projects = p.get_page(page)
         data = {
-            'projects': projects
+            'projects': projects,
+            'services': services
         }
 
         return render(request, "project.html", data)
@@ -149,7 +159,8 @@ class ServiceDetails(View):
         service_list = Services.objects.all()
         data = {
             'service': service,
-            'service_list': service_list
+            'service_list': service_list,
+            'services': services
         }
         return render(request, "service_detail.html", data)
 
@@ -160,7 +171,8 @@ class ProjectDetails(View):
         project_list = Project.objects.all()
         data = {
             'project': project,
-            'project_list': project_list
+            'project_list': project_list,
+            'services': services
         }
         return render(request, "project_detail.html", data)
 
@@ -174,14 +186,18 @@ class BlogList(View):
         page = request.GET.get('page')
         blogs = p.get_page(page)
         data = {
-            'blogs': blogs
+            'blogs': blogs,
+            'services': services
         }
         return render(request, "blog.html", data)
 
 
 class Account(View):
     def get(self, request):
-        return render(request, 'account/acc.html')
+        data = {
+            'services': services
+        }
+        return render(request, 'account/acc.html', data)
 
     def post(self, request):
         postData = request.POST
@@ -258,7 +274,8 @@ def userprofile(request, user_id):
     user = User.objects.get(id=user_id)
     print(user)
     data = {
-        'user': user
+        'user': user,
+        'services': services
     }
     return render(request, "account/userprofile.html", data)
 
@@ -318,7 +335,8 @@ class BlogDetails(View):
             'blog_list': blog_list,
             'total_comment': total_comment,
             'comment_form': comment_form,
-            'allcomments': allcomments
+            'allcomments': allcomments,
+            'services': services
         }
         return render(request, "blog-detail.html", data)
 
